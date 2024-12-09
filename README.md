@@ -1,4 +1,4 @@
-# project2
+# billetera-virtual
 
 ## Project setup
 ```
