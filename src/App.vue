@@ -8,8 +8,8 @@
         <router-link to="/about">About</router-link>
       </div>
       <div class="navbar-buttons">
-        <button v-if="!isLoginPage" @click="signIn">Sign In</button>
-        <button v-if="!isRegisterPage" @click="signUp">Sign Up</button>
+        <button v-if="!isLoginPage && !isLoggedIn" @click="signIn">Sign In</button>
+        <button v-if="!isRegisterPage && !isLoggedIn" @click="signUp">Sign Up</button>
         <button v-if="isLoggedIn" @click="logout">Cerrar sesión</button>
       </div>
     </nav>
@@ -27,44 +27,50 @@ export default {
       isLoggedIn: false,
     };
   },
+
   created() {
     // Verify the session when the component is created
     this.verifySession();
   },
+
   computed: {
+    // Check if the current route path is login
     isLoginPage() {
-      // Check if the current route path is '/login'
       return this.$route.path === "/";
     },
+
+    // Check if the current route path is register
     isRegisterPage() {
-      // Check if the current route path is '/login'
       return this.$route.path === "/register";
     },
   },
+
   methods: {
+    // Verify if we are in the login form
+    signIn() {
+      this.$router.push("/");
+    },
+
+    // Verify if we are in the register form
+    signUp() {
+      this.$router.push("/register");
+    },
+
     // Method to verify if the user is authenticated
     async verifySession() {
       try {
         const response = await axiosInstance.get("/verify-session", {
-          withCredentials: true, // Ensure cookies are included in the request
+          // Ensure cookies are included in the request
+          withCredentials: true,
         });
 
-        if (response.status === 200) {
-          this.isLoggedIn = true; // The user is authenticated
-        } else {
-          this.isLoggedIn = false; // The user is not authenticated
-        }
+        // The user is authenticated
+        this.isLoggedIn = response.status === 200;
       } catch (error) {
+        // Assume the user is not authenticated on error
         console.error("Error verifying session:", error);
-        this.isLoggedIn = false; // Assume the user is not authenticated on error
+        this.isLoggedIn = false;
       }
-    },
-
-    signIn() {
-      this.$router.push("/");
-    },
-    signUp() {
-      this.$router.push("/register");
     },
 
     // Method to log out
@@ -72,7 +78,8 @@ export default {
       try {
         await axiosInstance.post("/logout", {}, { withCredentials: true });
         this.isLoggedIn = false;
-        this.$router.push("/"); // Redirect to home after logging out
+        // Redirect to home after logging out
+        this.$router.push("/");
       } catch (error) {
         console.error("Error logging out:", error);
       }
