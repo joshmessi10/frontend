@@ -11,18 +11,18 @@
         <button v-if="!isLoginPage" @click="signIn">Sign In</button>
         <button v-if="!isRegisterPage" @click="signUp">Sign Up</button>
         <button v-if="isLoggedIn" @click="logout">Cerrar sesión</button>
-        <div v-if="isLoggedIn">
+        <div v-if="isLoggedIn" class="welcome-message">
           <p>¡Bienvenido!</p>
         </div>
       </div>
     </nav>
 
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
 <script>
-import axiosInstance from '@/axios.js';
+import axiosInstance from "@/axios.js";
 
 export default {
   data() {
@@ -37,12 +37,12 @@ export default {
   computed: {
     isLoginPage() {
       // Check if the current route path is '/login'
-      return this.$route.path === '/';
+      return this.$route.path === "/";
     },
     isRegisterPage() {
       // Check if the current route path is '/login'
-      return this.$route.path === '/register';
-    }
+      return this.$route.path === "/register";
+    },
   },
   methods: {
     // Method to verify if the user is authenticated
@@ -84,8 +84,6 @@ export default {
 };
 </script>
 
-
-
 <style scoped>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -93,6 +91,15 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+}
+
+.welcome-message {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Asegura que el contenedor ocupe toda la altura de la pantalla */
+  text-align: center;
+  font-size: 2rem; /* Ajusta el tamaño del texto si es necesario */
 }
 
 .navbar {
