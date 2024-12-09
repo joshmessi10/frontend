@@ -48,7 +48,7 @@ export default {
     async registerCellphone() {
       try {
         // Make an API call to register the cellphone with name, address, and OS
-        const response = await fetch("/api/cellphone", {
+        const response = await fetch("/cellphone", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({

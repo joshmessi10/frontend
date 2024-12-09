@@ -29,7 +29,7 @@ export default {
     async registerWallet() {
       try {
         // Make an API call to register the wallet (send only the name)
-        const response = await fetch("/api/wallet", {
+        const response = await fetch("/wallet", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
