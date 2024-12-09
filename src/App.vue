@@ -72,7 +72,7 @@ export default {
       try {
         await axiosInstance.post("/logout", {}, { withCredentials: true });
         this.isLoggedIn = false;
-        this.$router.push("/home"); // Redirect to home after logging out
+        this.$router.push("/"); // Redirect to home after logging out
       } catch (error) {
         console.error("Error logging out:", error);
       }

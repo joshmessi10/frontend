@@ -107,7 +107,7 @@ export default {
           console.log("Registro exitoso:", response.data);
           alert("Usuario registrado exitosamente.");
           // Redirigir a Login después del registro exitoso
-          this.$router.push("/login");
+          this.$router.push("/");
         } else {
           // Manejo de errores de validación específicos
           if (response.data.error === "Error de validación") {

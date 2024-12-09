@@ -57,6 +57,7 @@ export default {
             });
 
             if (response.status === 200) {
+              console.log(response);
               // Redirect to register-wallet after successful login
               router.push("/register-wallet");
             } else {
