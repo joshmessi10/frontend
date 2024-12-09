@@ -52,7 +52,9 @@
         placeholder="Password"
       />
 
-      <label class="form-label" for="passwordRepeat">Repite la contraseña:</label>
+      <label class="form-label" for="passwordRepeat"
+        >Repite la contraseña:</label
+      >
       <input
         v-model="passwordRepeat"
         class="form-input"
@@ -63,7 +65,7 @@
       />
 
       <input class="form-submit" type="submit" value="Sign Up" />
-      
+
       <!-- Mensaje de error -->
       <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
     </form>
@@ -71,7 +73,7 @@
 </template>
 
 <script>
-import axiosInstance from '@/axios.js';
+import axiosInstance from "@/axios.js";
 
 export default {
   data() {
@@ -105,17 +107,18 @@ export default {
           console.log("Registro exitoso:", response.data);
           alert("Usuario registrado exitosamente.");
           // Redirigir a Login después del registro exitoso
-          this.$router.push('/login');
+          this.$router.push("/login");
         } else {
           // Manejo de errores de validación específicos
           if (response.data.error === "Error de validación") {
             let errorMessages = "";
-            response.data.detalles.forEach(error => {
+            response.data.detalles.forEach((error) => {
               errorMessages += `${error.mensaje}\n`; // Concatenar los mensajes de error
             });
             this.errorMessage = `Errores de validación:\n${errorMessages}`;
           } else {
-            this.errorMessage = "Error desconocido, por favor intente nuevamente.";
+            this.errorMessage =
+              "Error desconocido, por favor intente nuevamente.";
             console.error("Error:", response.data.error);
           }
         }
@@ -127,8 +130,6 @@ export default {
   },
 };
 </script>
-
-
 
 <style lang="scss" scoped>
 .register {

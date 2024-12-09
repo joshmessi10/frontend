@@ -5,33 +5,97 @@
       <span class="time">{{ formattedDate }} {{ formattedTime }}</span>
       <div class="status-icons">
         <!-- Icono de alerta -->
-        <img v-if="alertLevel === 'none'" src="../assets/alert-none.png" class="icon" title="Sin Alerta" alt="Sin Alerta">
-        <img v-else-if="alertLevel === 'warning'" src="../assets/alert-warning.png" class="icon" title="Alerta Amarilla" alt="Alerta Amarilla">
-        <img v-else-if="alertLevel === 'alert'" src="../assets/alert-red.png" class="icon" title="Alerta Roja" alt="Alerta Roja">
+        <img
+          v-if="alertLevel === 'none'"
+          src="../assets/alert-none.png"
+          class="icon"
+          title="Sin Alerta"
+          alt="Sin Alerta"
+        />
+        <img
+          v-else-if="alertLevel === 'warning'"
+          src="../assets/alert-warning.png"
+          class="icon"
+          title="Alerta Amarilla"
+          alt="Alerta Amarilla"
+        />
+        <img
+          v-else-if="alertLevel === 'alert'"
+          src="../assets/alert-red.png"
+          class="icon"
+          title="Alerta Roja"
+          alt="Alerta Roja"
+        />
 
         <!-- Icono de Bluetooth -->
-        <img v-if="bluetoothStatus === 'Conectado'" src="../assets/bluetooth-connected.png" class="icon" title="Bluetooth Conectado" alt="Bluetooth Conectado">
-        <img v-else src="../assets/bluetooth-disconnected.png" class="icon" title="Bluetooth Desconectado" alt="Bluetooth Desconectado">
+        <img
+          v-if="bluetoothStatus === 'Conectado'"
+          src="../assets/bluetooth-connected.png"
+          class="icon"
+          title="Bluetooth Conectado"
+          alt="Bluetooth Conectado"
+        />
+        <img
+          v-else
+          src="../assets/bluetooth-disconnected.png"
+          class="icon"
+          title="Bluetooth Desconectado"
+          alt="Bluetooth Desconectado"
+        />
 
         <!-- Icono de batería -->
-        <img v-if="batteryLevel <= 10" src="../assets/battery-empty.png" class="icon" title="Batería Baja" alt="Batería Baja">
-        <img v-else-if="batteryLevel <= 30" src="../assets/battery-low.png" class="icon" title="Batería Baja" alt="Batería Baja">
-        <img v-else-if="batteryLevel <= 70" src="../assets/battery-medium.png" class="icon" title="Batería Media" alt="Batería Media">
-        <img v-else-if="batteryLevel <= 90" src="../assets/battery-high.png" class="icon" title="Batería Alta" alt="Batería Alta">
-        <img v-else src="../assets/battery-full.png" class="icon" title="Batería Llena" alt="Batería Llena">
+        <img
+          v-if="batteryLevel <= 10"
+          src="../assets/battery-empty.png"
+          class="icon"
+          title="Batería Baja"
+          alt="Batería Baja"
+        />
+        <img
+          v-else-if="batteryLevel <= 30"
+          src="../assets/battery-low.png"
+          class="icon"
+          title="Batería Baja"
+          alt="Batería Baja"
+        />
+        <img
+          v-else-if="batteryLevel <= 70"
+          src="../assets/battery-medium.png"
+          class="icon"
+          title="Batería Media"
+          alt="Batería Media"
+        />
+        <img
+          v-else-if="batteryLevel <= 90"
+          src="../assets/battery-high.png"
+          class="icon"
+          title="Batería Alta"
+          alt="Batería Alta"
+        />
+        <img
+          v-else
+          src="../assets/battery-full.png"
+          class="icon"
+          title="Batería Llena"
+          alt="Batería Llena"
+        />
       </div>
     </div>
 
     <!-- Encabezado -->
     <header class="header">
-      <img alt="Billetera Inteligente" src="../assets/wallet-logo.png" class="logo">
+      <img
+        alt="Billetera Inteligente"
+        src="../assets/wallet-logo.png"
+        class="logo"
+      />
       <h1 class="main-title">Bienvenido a Tu Billetera Inteligente</h1>
     </header>
 
     <!-- Módulo de bloqueo de seguridad manual -->
     <section class="lock-section">
       <button v-on:click="toggleLock" :class="{ locked: isLocked }">
-        {{ isLocked ? 'Desbloquear' : 'Bloquear' }} Billetera
+        {{ isLocked ? "Desbloquear" : "Bloquear" }} Billetera
       </button>
     </section>
 
@@ -39,68 +103,100 @@
     <section class="status-section">
       <h2>Estado de la Billetera</h2>
       <div class="status-item">
-        <p>Conexión Bluetooth: 
-          <span :style="{ color: bluetoothStatus === 'Conectado' ? 'green' : 'red' }">
+        <p>
+          Conexión Bluetooth:
+          <span
+            :style="{
+              color: bluetoothStatus === 'Conectado' ? 'green' : 'red',
+            }"
+          >
             <strong>{{ bluetoothStatus }}</strong>
           </span>
         </p>
-        <button v-on:click="toggleBluetooth">{{ bluetoothStatus === 'Conectado' ? 'Desconectar' : 'Conectar' }} Bluetooth</button>
-        <p>Nivel de Batería: 
-          <span :style="{ color: batteryLevel <= 20 ? 'red' : (batteryLevel <= 50 ? 'yellow' : 'green') }">
+        <button v-on:click="toggleBluetooth">
+          {{
+            bluetoothStatus === "Conectado" ? "Desconectar" : "Conectar"
+          }}
+          Bluetooth
+        </button>
+        <p>
+          Nivel de Batería:
+          <span
+            :style="{
+              color:
+                batteryLevel <= 20
+                  ? 'red'
+                  : batteryLevel <= 50
+                  ? 'yellow'
+                  : 'green',
+            }"
+          >
             <strong>{{ batteryLevel }}%</strong>
           </span>
         </p>
-        <p>Distancia del Teléfono: <strong>{{ estimatedDistance }} m</strong></p>
-        <p>Última Ubicación: <strong>{{ lastLocation }}</strong></p>
+        <p>
+          Distancia del Teléfono: <strong>{{ estimatedDistance }} m</strong>
+        </p>
+        <p>
+          Última Ubicación: <strong>{{ lastLocation }}</strong>
+        </p>
       </div>
     </section>
 
     <!-- Enlaces a otras páginas -->
     <section class="links-section">
-      <router-link to="/alertas" class="link-button">Ver Alertas de Seguridad</router-link>
-      <router-link to="/historial" class="link-button">Ver Historial de Conexiones</router-link>
+      <router-link to="/alertas" class="link-button"
+        >Ver Alertas de Seguridad</router-link
+      >
+      <router-link to="/historial" class="link-button"
+        >Ver Historial de Conexiones</router-link
+      >
     </section>
   </div>
 </template>
 
-
-
 <script>
 export default {
-  name: 'HomeView',
+  name: "HomeView",
   data() {
     return {
-      bluetoothStatus: 'Conectado', // Estado de Bluetooth
+      bluetoothStatus: "Conectado", // Estado de Bluetooth
       batteryLevel: 80, // Nivel de batería
       estimatedDistance: 1.2, // Distancia estimada en metros
-      lastLocation: 'Latitud: 34.0522, Longitud: -118.2437', // Ejemplo de ubicación
+      lastLocation: "Latitud: 34.0522, Longitud: -118.2437", // Ejemplo de ubicación
       isLocked: true, // Estado de bloqueo de la billetera
-      alertLevel: 'none' // Nivel de alerta: 'none', 'warning', 'alert'
+      alertLevel: "none", // Nivel de alerta: 'none', 'warning', 'alert'
     };
   },
   computed: {
     // Obtiene la fecha en formato "Día, Mes DD, YYYY"
     formattedDate() {
-      const options = { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' };
-      return new Date().toLocaleDateString('es-ES', options);
+      const options = {
+        weekday: "long",
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+      };
+      return new Date().toLocaleDateString("es-ES", options);
     },
     // Obtiene la hora en formato de 12 horas con AM/PM
     formattedTime() {
       const date = new Date();
       const hours = date.getHours();
-      const minutes = date.getMinutes().toString().padStart(2, '0');
-      const ampm = hours >= 12 ? 'PM' : 'AM';
+      const minutes = date.getMinutes().toString().padStart(2, "0");
+      const ampm = hours >= 12 ? "PM" : "AM";
       const formattedHours = hours % 12 || 12;
       return `${formattedHours}:${minutes} ${ampm}`;
-    }
+    },
   },
   methods: {
     toggleLock() {
       this.isLocked = !this.isLocked;
     },
     toggleBluetooth() {
-      this.bluetoothStatus = this.bluetoothStatus === 'Conectado' ? 'Desconectado' : 'Conectado';
-    }
+      this.bluetoothStatus =
+        this.bluetoothStatus === "Conectado" ? "Desconectado" : "Conectado";
+    },
   },
   mounted() {
     // Actualiza la hora cada segundo
@@ -108,7 +204,6 @@ export default {
       this.$forceUpdate(); // Fuerza la actualización para refrescar la fecha y hora
     }, 1000);
   },
-  
 };
 </script>
 
@@ -171,7 +266,9 @@ h2 {
 }
 
 /* Otros estilos */
-.lock-section, .status-section, .links-section {
+.lock-section,
+.status-section,
+.links-section {
   margin: 20px auto;
   width: 80%;
   text-align: left;
@@ -200,7 +297,7 @@ h2 {
   text-decoration: none;
   border-radius: 5px;
   transition: background-color 0.3s;
-  margin-right: 50px; 
+  margin-right: 50px;
 }
 
 .link-button:hover {

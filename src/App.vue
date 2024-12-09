@@ -11,9 +11,6 @@
         <button v-if="!isLoginPage" @click="signIn">Sign In</button>
         <button v-if="!isRegisterPage" @click="signUp">Sign Up</button>
         <button v-if="isLoggedIn" @click="logout">Cerrar sesión</button>
-        <div v-if="isLoggedIn" class="welcome-message">
-          <p>¡Bienvenido!</p>
-        </div>
       </div>
     </nav>
 
@@ -91,15 +88,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-}
-
-.welcome-message {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh; /* Asegura que el contenedor ocupe toda la altura de la pantalla */
-  text-align: center;
-  font-size: 2rem; /* Ajusta el tamaño del texto si es necesario */
 }
 
 .navbar {

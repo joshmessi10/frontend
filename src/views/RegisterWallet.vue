@@ -11,7 +11,6 @@
         placeholder="Nombre"
         required
       />
-
       <button type="submit" class="form-submit">Regístrala</button>
     </form>
     <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
@@ -22,32 +21,32 @@
 export default {
   data() {
     return {
-      walletName: '',
-      errorMessage: ''
+      walletName: "",
+      errorMessage: "",
     };
   },
   methods: {
     async registerWallet() {
       try {
         // Make an API call to register the wallet (send only the name)
-        const response = await fetch('/api/wallet', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+        const response = await fetch("/api/wallet", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            name: this.walletName
-          })
+            name: this.walletName,
+          }),
         });
 
         if (!response.ok) {
-          throw new Error('Failed to register wallet');
+          throw new Error("Failed to register wallet");
         }
 
-        this.$router.push('/register-cellphone'); // Redirect to success page
+        this.$router.push("/register-cellphone"); // Redirect to success page
       } catch (error) {
         this.errorMessage = error.message;
       }
-    }
-  }
+    },
+  },
 };
 </script>
 

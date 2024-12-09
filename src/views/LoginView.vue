@@ -3,20 +3,34 @@
     <h1 class="title">Iniciar sesión</h1>
     <form class="form" @submit.prevent="login">
       <label class="form-label" for="email">Email:</label>
-      <input v-model="email" class="form-input" type="email" id="email" required placeholder="Email" />
-      
+      <input
+        v-model="email"
+        class="form-input"
+        type="email"
+        id="email"
+        required
+        placeholder="Email"
+      />
+
       <label class="form-label" for="password">Contraseña:</label>
-      <input v-model="password" class="form-input" type="password" id="password" required placeholder="Contraseña" />
-      
+      <input
+        v-model="password"
+        class="form-input"
+        type="password"
+        id="password"
+        required
+        placeholder="Contraseña"
+      />
+
       <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
-      
+
       <input class="form-submit" type="submit" value="Iniciar sesión" />
     </form>
   </div>
 </template>
 
 <script>
-import axiosInstance from '@/axios.js';
+import axiosInstance from "@/axios.js";
 import router from "../router";
 
 export default {
@@ -54,7 +68,8 @@ export default {
             this.errorMessage = "Error verifying session. Please try again.";
           }
         } else {
-          this.errorMessage = response.data.message || "Login failed. Please try again.";
+          this.errorMessage =
+            response.data.message || "Login failed. Please try again.";
         }
       } catch (error) {
         this.errorMessage =
