@@ -8,9 +8,9 @@
         <router-link to="/about">About</router-link>
       </div>
       <div class="navbar-buttons">
-        <button v-if="!isLoginPage && !isLoggedIn" @click="signIn">Sign In</button>
-        <button v-if="!isRegisterPage && !isLoggedIn" @click="signUp">Sign Up</button>
-        <button v-if="isLoggedIn" @click="logout">Cerrar sesión</button>
+        <button v-if="isRegisterPage" @click="signIn">Sign In</button>
+        <button v-if="isLoginPage" @click="signUp">Sign Up</button>
+        <button v-if="!isLoginPage && !isRegisterPage" @click="logout">Cerrar sesión</button>
       </div>
     </nav>
 
