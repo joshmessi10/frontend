@@ -65,7 +65,7 @@ export default {
         });
 
         // The user is authenticated
-        this.isLoggedIn = response.status === 200;
+        this.isLoggedIn = response.status == 200;
       } catch (error) {
         // Assume the user is not authenticated on error
         console.error("Error verifying session:", error);

@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import axiosInstance from "@/axios.js";
+import axios from "axios";
 import router from "../router";
 
 export default {
@@ -44,31 +44,18 @@ export default {
   methods: {
     async login() {
       try {
-        const response = await axiosInstance.post("/login", {
+        const response = await axios.post("http://35.188.126.68/login", {
           email: this.email,
           password: this.password,
         });
 
-        if (response.status === 200) {
+        if (response.status == 200) {
           console.log("Logged in");
-          try {
-            const response = await axiosInstance.get("/verify-session", {
-              withCredentials: true, // Ensure cookies are included in the request
-            });
-
-            if (response.status === 200) {
-              console.log(response);
-              // Redirect to register-wallet after successful login
-              router.push("/register-wallet");
-            } else {
-              // If session verification fails, redirect to register
-              router.push("/register");
-            }
-          } catch (error) {
-            console.error("Error verifying session:", error);
-            this.errorMessage = "Error verifying session. Please try again.";
-          }
+          console.log(response);
+          router.push("/register-wallet");
         } else {
+              // If session verification fails, redirect to register
+          router.push("/register");
           this.errorMessage =
             response.data.message || "Login failed. Please try again.";
         }

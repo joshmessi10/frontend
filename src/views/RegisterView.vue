@@ -73,7 +73,7 @@
 </template>
 
 <script>
-import axiosInstance from "@/axios.js";
+import axios from "axios";
 
 export default {
   data() {
@@ -89,13 +89,13 @@ export default {
   },
   methods: {
     async register() {
-      if (this.password !== this.passwordRepeat) {
+      if (this.password != this.passwordRepeat) {
         this.errorMessage = "Las contraseñas no coinciden";
         return;
       }
 
       try {
-        const response = await axiosInstance.post("/register", {
+        const response = await axios.post("http://35.188.126.68/register", {
           nombre_usuario: this.nombre_usuario,
           apellido_usuario: this.apellido_usuario,
           email: this.email,
@@ -103,14 +103,14 @@ export default {
           password: this.password,
         });
 
-        if (response.status === 200) {
+        if (response.status == 200) {
           console.log("Registro exitoso:", response.data);
           alert("Usuario registrado exitosamente.");
           // Redirigir a Login después del registro exitoso
           this.$router.push("/");
         } else {
           // Manejo de errores de validación específicos
-          if (response.data.error === "Error de validación") {
+          if (response.data.error == "Error de validación") {
             let errorMessages = "";
             response.data.detalles.forEach((error) => {
               errorMessages += `${error.mensaje}\n`; // Concatenar los mensajes de error
