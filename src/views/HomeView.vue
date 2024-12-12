@@ -135,9 +135,6 @@
           </span>
         </p>
         <p>
-          Distancia del Teléfono: <strong>{{ estimatedDistance }} m</strong>
-        </p>
-        <p>
           Última Ubicación: <strong>{{ lastLocation }}</strong>
         </p>
       </div>
@@ -156,17 +153,104 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "HomeView",
   data() {
     return {
-      bluetoothStatus: "Conectado", // Estado de Bluetooth
-      batteryLevel: 80, // Nivel de batería
-      estimatedDistance: 1.2, // Distancia estimada en metros
+      bluetoothStatus: "Desconectado", // Estado de Bluetooth
+      batteryLevel: 0, // Nivel de batería
       lastLocation: "Latitud: 34.0522, Longitud: -118.2437", // Ejemplo de ubicación
       isLocked: true, // Estado de bloqueo de la billetera
       alertLevel: "none", // Nivel de alerta: 'none', 'warning', 'alert'
+      previousAlertLevel: "none", // To track the previous alert level
+      errorMessage: "",
     };
+  },
+  async created() {
+    this.fetchSensorData();
+    this.fetchEventData();
+    this.interval = setInterval(() => {
+      this.fetchSensorData();
+      this.fetchEventData();
+      this.checkAlertLevel();
+    }, 5000); // Fetch data every 5 seconds
+  },
+  beforeDestroy() {
+    clearInterval(this.interval); // Clear the interval when the component is destroyed
+  },
+  methods: {
+    async fetchSensorData() {
+      try {
+        const walletId = localStorage.getItem("selectedWalletId"); // Retrieve the wallet ID from localStorage
+        if (!walletId) {
+          throw new Error("Wallet ID not found. Please select a wallet.");
+        }
+
+        const response = await axios.get(`http://35.188.126.68/sensor`, {
+          params: { id_billetera: walletId },
+        });
+
+        if (response.status !== 200) {
+          throw new Error("Failed to fetch sensor data");
+        }
+
+        const data = response.data.data;
+        this.bluetoothStatus = data.bluetooth?.lectura_sensor === 0 ? "Conectado" : "Desconectado";
+        this.batteryLevel = data.bateria?.lectura_sensor || 0;
+        this.isLocked = data.magnetico?.lectura_sensor === 0;
+      } catch (error) {
+        this.errorMessage = error.message;
+      }
+    },
+    async fetchEventData() {
+      try {
+        const walletId = localStorage.getItem("selectedWalletId"); // Retrieve the wallet ID from localStorage
+        if (!walletId) {
+          throw new Error("Wallet ID not found. Please select a wallet.");
+        }
+
+        const response = await axios.get(`http://35.188.126.68/evento`, {
+          params: { id_billetera: walletId },
+        });
+
+        if (response.status !== 200) {
+          throw new Error("Failed to fetch event data");
+        }
+
+        const event = response.data.data;
+        const tipoEvento = event.tipo_evento;
+
+        this.previousAlertLevel = this.alertLevel; // Store the current alert level
+
+        if (tipoEvento === "caida_detectada" || tipoEvento === "movimiento_brusco") {
+          this.alertLevel = "warning";
+        } else if (
+          tipoEvento === "bateria_baja" ||
+          tipoEvento === "billetera_abierta" ||
+          tipoEvento === "desconexion"
+        ) {
+          this.alertLevel = "alert";
+        } else {
+          this.alertLevel = "none";
+        }
+      } catch (error) {
+        this.errorMessage = error.message;
+      }
+    },
+    checkAlertLevel() {
+      if (this.alertLevel === this.previousAlertLevel && (this.alertLevel === "warning" || this.alertLevel === "alert")) {
+        this.alertLevel = "none";
+      }
+    },
+    toggleLock() {
+      this.isLocked = !this.isLocked;
+    },
+    toggleBluetooth() {
+      this.bluetoothStatus =
+        this.bluetoothStatus === "Conectado" ? "Desconectado" : "Conectado";
+    },
   },
   computed: {
     // Obtiene la fecha en formato "Día, Mes DD, YYYY"
@@ -187,15 +271,6 @@ export default {
       const ampm = hours >= 12 ? "PM" : "AM";
       const formattedHours = hours % 12 || 12;
       return `${formattedHours}:${minutes} ${ampm}`;
-    },
-  },
-  methods: {
-    toggleLock() {
-      this.isLocked = !this.isLocked;
-    },
-    toggleBluetooth() {
-      this.bluetoothStatus =
-        this.bluetoothStatus === "Conectado" ? "Desconectado" : "Conectado";
     },
   },
   mounted() {

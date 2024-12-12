@@ -52,6 +52,7 @@ export default {
         if (response.status == 200) {
           console.log("Logged in");
           console.log(response);
+          localStorage.setItem("userId", response.data.id_usuario);
           router.push("/register-wallet");
         } else {
               // If session verification fails, redirect to register

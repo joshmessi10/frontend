@@ -1,47 +1,69 @@
 <template>
   <div class="register-wallet">
-    <h2 class="title">Registra tu Billetera Inteligente</h2>
-    <form @submit.prevent="registerWallet" class="form">
-      <label for="walletName" class="form-label">Nombre de la Billetera:</label>
-      <input
-        type="text"
-        id="walletName"
-        v-model="walletName"
+    <h2 class="title">Selecciona tu Billetera Inteligente</h2>
+    <form @submit.prevent="selectWallet" class="form">
+      <label for="walletSelect" class="form-label">Selecciona una Billetera:</label>
+      <select
+        id="walletSelect"
+        v-model="selectedWalletId"
         class="form-input"
-        placeholder="Nombre"
         required
-      />
-      <button type="submit" class="form-submit">Regístrala</button>
+      >
+        <option v-for="wallet in wallets" :key="wallet.id" :value="wallet.id">
+          {{ wallet.name }}
+        </option>
+      </select>
+      <button type="submit" class="form-submit">Seleccionar</button>
     </form>
     <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
   </div>
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
-      walletName: "",
+      wallets: [],
+      selectedWalletId: "",
       errorMessage: "",
     };
   },
-  methods: {
-    async registerWallet() {
-      try {
-        // Make an API call to register the wallet (send only the name)
-        const response = await fetch("/wallet", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: this.walletName,
-          }),
-        });
+  async created() {
+    try {
+      const userId = localStorage.getItem("userId"); // Retrieve the user ID from localStorage
+      if (!userId) {
+        throw new Error("User ID not found. Please log in again.");
+      }
 
-        if (!response.ok) {
-          throw new Error("Failed to register wallet");
+      const response = await axios.get(`http://35.188.126.68/billetera`, {
+        params: { id_usuario: userId },
+      });
+
+      if (response.status !== 200) {
+        throw new Error("Failed to fetch wallets");
+      }
+
+      const data = response.data;
+      this.wallets = data.names.map((name, index) => ({
+        id: data.ids[index],
+        name: name,
+      }));
+    } catch (error) {
+      this.errorMessage = error.message;
+    }
+  },
+  methods: {
+    selectWallet() {
+      try {
+        if (!this.selectedWalletId) {
+          throw new Error("Please select a wallet");
         }
 
-        this.$router.push("/register-cellphone"); // Redirect to success page
+        // Store the selected wallet ID in localStorage or handle it as needed
+        localStorage.setItem("selectedWalletId", this.selectedWalletId);
+        this.$router.push("/register-cellphone"); // Redirect to the next step
       } catch (error) {
         this.errorMessage = error.message;
       }

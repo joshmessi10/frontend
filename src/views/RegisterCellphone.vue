@@ -35,6 +35,8 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   data() {
     return {
@@ -47,24 +49,30 @@ export default {
   methods: {
     async registerCellphone() {
       try {
-        // Make an API call to register the cellphone with name, address, and OS
-        const response = await fetch("/cellphone", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            name: this.cellphoneName,
-            address: this.address,
-            osType: this.osType,
-          }),
-        });
+        const userId = localStorage.getItem("userId"); // Retrieve the user ID from localStorage
+        const walletId = localStorage.getItem("selectedWalletId"); // Retrieve the wallet ID from localStorage
 
-        if (!response.ok) {
-          throw new Error("Failed to register cellphone");
+        if (!userId || !walletId) {
+          throw new Error("User ID or Wallet ID not found. Please log in again.");
         }
 
-        this.$router.push("/home"); // Redirect to success page
+        const response = await axios.post("http://35.188.126.68/celular", {
+          id_billetera: walletId,
+          id_usuario: userId,
+          nombre_dispositivo: this.cellphoneName,
+          direccion_mac: this.address,
+          sistema_operativo: this.osType,
+        });
+
+        if (response.status === 201) {
+          console.log("Celular registrado exitosamente");
+          this.$router.push("/home"); 
+        } else {
+          this.errorMessage = response.data.message || "Error al registrar el celular";
+        }
       } catch (error) {
-        this.errorMessage = error.message;
+        this.errorMessage = error.response?.data?.message || "Error al conectar con el servidor";
+        console.error("Error during cellphone registration:", error);
       }
     },
   },
@@ -75,52 +83,37 @@ export default {
 .register-cellphone {
   padding: 2rem;
   max-width: 600px;
-  margin: auto;
-  background: #f9f9f9;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin: 0 auto;
 }
 
 .title {
-  text-align: center;
-  font-size: 1.8rem;
-  color: #333;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
 }
 
 .form-label {
-  font-size: 1rem;
-  color: #555;
+  margin-bottom: 0.5rem;
 }
 
 .form-input {
-  padding: 10px;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
   font-size: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 5px;
 }
 
 .form-submit {
-  background-color: #1ab188;
-  color: white;
-  border: none;
-  padding: 1rem;
+  padding: 0.5rem;
+  font-size: 1rem;
   cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s;
-}
-
-.form-submit:hover {
-  background-color: #0b9185;
 }
 
 .error-message {
   color: red;
-  text-align: center;
+  margin-top: 1rem;
 }
 </style>
